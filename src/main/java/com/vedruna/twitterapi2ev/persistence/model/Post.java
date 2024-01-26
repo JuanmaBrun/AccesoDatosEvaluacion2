@@ -1,24 +1,27 @@
-package com.vedruna.twitterapi2ev.entities;
+package com.vedruna.twitterapi2ev.persistence.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "publication")
-public class Publication {
+public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "P_id")
     private Long publicationId;
 
     @Column(name = "P_author")
+    @JoinColumn(name = "P_author_username", referencedColumnName = "U_userName")
     private User author;
 
     @Column(name = "P_text")

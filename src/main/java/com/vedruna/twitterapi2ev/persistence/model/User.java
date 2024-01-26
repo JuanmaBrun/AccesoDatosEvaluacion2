@@ -1,10 +1,10 @@
-package com.vedruna.twitterapi2ev.entities;
+package com.vedruna.twitterapi2ev.persistence.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,8 +12,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "user")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "U_userId")
@@ -36,9 +38,17 @@ public class User {
 
     @OneToMany(mappedBy = "relatedUser")
     @JoinColumn()
-    private List<Publication> publications;
+    private List<Post> posts;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_follows",
+            joinColumns = @JoinColumn(name = "follower_id"),
+            inverseJoinColumns = @JoinColumn(name = "followed_id")
+    )
     private List<User> followers;
 
+    @ManyToMany(mappedBy = "followers")
     private List<User> followed;
+
 }
