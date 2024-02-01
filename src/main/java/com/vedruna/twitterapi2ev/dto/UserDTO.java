@@ -10,8 +10,7 @@ public class UserDTO implements Serializable {
     private String username;
     private String description;
 
-    public UserDTO(Long id, String username, String description) {
-        this.id = id;
+    public UserDTO( String username, String description) {
         this.username = username;
         this.description = description;
     }

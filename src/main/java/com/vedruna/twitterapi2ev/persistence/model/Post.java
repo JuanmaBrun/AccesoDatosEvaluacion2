@@ -3,9 +3,9 @@ package com.vedruna.twitterapi2ev.persistence.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 @Entity
 @Builder
@@ -20,18 +20,18 @@ public class Post implements Serializable {
     @Column(name = "P_id")
     private Long publicationId;
 
-    @Column(name = "P_author")
-    @JoinColumn(name = "P_author_username", referencedColumnName = "U_userName")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "P_author_username", referencedColumnName = "U_username")
     private User author;
 
     @Column(name = "P_text")
     private String text;
 
     @Column(name = "P_createDate")
-    private Date createDate;
+    private LocalDate createDate;
 
     @Column(name = "P_editDate")
-    private Date editDate;
+    private LocalDate editDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "P_FK_USER_ID", referencedColumnName = "U_userId")

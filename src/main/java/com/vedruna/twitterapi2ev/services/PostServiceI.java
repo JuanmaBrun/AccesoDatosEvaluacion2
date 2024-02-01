@@ -1,9 +1,11 @@
 package com.vedruna.twitterapi2ev.services;
 
 import com.vedruna.twitterapi2ev.dto.PostDTO;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface PostServiceI {
 
     //Obtener todas las publicaciones (privado)
@@ -19,9 +21,9 @@ public interface PostServiceI {
 
     List<PostDTO> getPostsByFollowedUsers(Long userId);
 
-    void createPost(Long userId, PostDTO postDTO);
+    void createPost(Long userId, String Text, PostDTO postDTO);
 
-    void editPost(Long postId, PostDTO postDTO);
+    PostDTO editPost(Long postId, PostDTO postDTO, String Text);
 
     void deletePost(Long postId);
 

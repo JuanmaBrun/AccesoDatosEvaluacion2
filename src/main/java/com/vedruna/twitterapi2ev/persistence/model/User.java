@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -21,8 +21,8 @@ public class User implements Serializable {
     @Column(name = "U_userId")
     private Long userId;
 
-    @Column(name = "U_userName", unique = true)
-    private String userName;
+    @Column(name = "U_username", unique = true)
+    private String username;
 
     @Column(name = "U_email", unique = true)
     private String email;
@@ -34,10 +34,9 @@ public class User implements Serializable {
     private String description;
 
     @Column(name = "U_createDate")
-    private Date createDate;
+    private LocalDate createDate;
 
-    @OneToMany(mappedBy = "relatedUser")
-    @JoinColumn()
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
 
     @ManyToMany
