@@ -1,39 +1,34 @@
 package com.vedruna.twitterapi2ev.persistence.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 
-
-@Entity
+@Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@Table(name = "publication")
-public class Post implements Serializable {
+@NoArgsConstructor
+@Entity
+@Table(name = "post")
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "P_id")
-    private Long publicationId;
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "P_author_username", referencedColumnName = "U_username")
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
-    @Column(name = "P_text")
+    @Column(nullable = false)
     private String text;
 
-    @Column(name = "P_createDate")
-    private LocalDate createDate;
+    @Temporal(TemporalType.DATE)
+    private Date createDate;
 
-    @Column(name = "P_editDate")
-    private LocalDate editDate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "P_FK_USER_ID", referencedColumnName = "U_userId")
-    private User relateUser;
+    @Temporal(TemporalType.DATE)
+    private Date editDate;
 }

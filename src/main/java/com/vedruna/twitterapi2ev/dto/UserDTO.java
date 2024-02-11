@@ -1,16 +1,20 @@
 package com.vedruna.twitterapi2ev.dto;
 
-import lombok.Data;
+public class UserDTO {
 
-import java.io.Serializable;
-
-@Data
-public class UserDTO implements Serializable {
     private Long id;
     private String username;
     private String description;
 
-    public UserDTO( String username, String description) {
+    public UserDTO() {}
+
+    public UserDTO(String username, String description) {
+        this.username = username;
+        this.description = description;
+    }
+
+    public UserDTO(Long id, String username, String description) {
+        this.id = id;
         this.username = username;
         this.description = description;
     }

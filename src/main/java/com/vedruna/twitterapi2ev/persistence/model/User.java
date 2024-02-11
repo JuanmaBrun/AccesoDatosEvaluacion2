@@ -1,53 +1,88 @@
 package com.vedruna.twitterapi2ev.persistence.model;
 
+import com.vedruna.twitterapi2ev.config.ApplicationConfig;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
-@Entity
+@Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@Table(name = "user")
-public class User implements Serializable {
+@NoArgsConstructor
+@Entity
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "U_userId")
-    private Long userId;
+    private Long id;
 
-    @Column(name = "U_username", unique = true)
     private String username;
 
-    @Column(name = "U_email", unique = true)
-    private String email;
-
-    @Column(name = "U_password")
     private String password;
 
-    @Column(name = "U_description")
+    private String email;
+
+    @Temporal(TemporalType.DATE)
+    private Date createDate;
+
     private String description;
 
-    @Column(name = "U_createDate")
-    private LocalDate createDate;
-
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Post> posts;
 
     @ManyToMany
     @JoinTable(
             name = "user_follows",
-            joinColumns = @JoinColumn(name = "follower_id"),
-            inverseJoinColumns = @JoinColumn(name = "followed_id")
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "followed_user_id")
     )
+    private List<User> following;
+
+    @ManyToMany(mappedBy = "following")
     private List<User> followers;
 
-    @ManyToMany(mappedBy = "followers")
-    private List<User> followed;
+    @Enumerated(EnumType.STRING)
+    Role role;
 
+
+    @Override
+    public List<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority((role.name())));
+    }
+
+    @Transient
+    private PasswordEncoder passwordEncoder;
+
+    public void setPassword(String password) {
+        this.password = passwordEncoder.encode(password);
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

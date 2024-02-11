@@ -1,21 +1,19 @@
 package com.vedruna.twitterapi2ev.dto;
 
-import com.vedruna.twitterapi2ev.persistence.model.User;
-import jakarta.persistence.Column;
-import lombok.Data;
+import com.vedruna.twitterapi2ev.persistence.model.Post;
 
-import java.io.Serializable;
+public class PostDTO {
 
-@Data
-public class PostDTO implements Serializable {
     private Long publicationId;
-    private User author;
+    private String author;
     private String text;
 
-    public PostDTO(Long publicationId, User author, String text) {
-        this.publicationId = publicationId;
-        this.author = author;
-        this.text = text;
+    public PostDTO() {}
+
+    public PostDTO(Post post) {
+        this.publicationId = post.getId();
+        this.author = post.getAuthor().getUsername();
+        this.text = post.getText();
     }
 
     public Long getPublicationId() {
@@ -26,11 +24,11 @@ public class PostDTO implements Serializable {
         this.publicationId = publicationId;
     }
 
-    public User getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
